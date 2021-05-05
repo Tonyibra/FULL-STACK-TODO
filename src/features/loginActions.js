@@ -4,6 +4,7 @@ export const login = (email, password) => async (dispatch) => {
 	try {
 		dispatch({ type: "LOGIN_REQUEST" });
 		const loginResponse = await axios.post(LOGIN_URL, { email, password });
+		console.log(loginResponse.data.token);
 		localStorage.setItem("token", loginResponse.data.token);
 		dispatch({ type: "LOGIN_REQUEST_SUCCESS", payload: loginResponse.data });
 	} catch (error) {

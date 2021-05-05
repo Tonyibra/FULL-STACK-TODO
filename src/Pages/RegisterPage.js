@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input } from "@material-ui/core";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { registerNewUser } from "../features/registerActions";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 const RegisterPage = () => {
+	const [token, setToken] = useState("");
 	const { data } = useSelector((state) => state.RegisterData.details);
 	const [username, setUserName] = useState("");
 	const [email, setEmail] = useState("");
@@ -28,13 +29,17 @@ const RegisterPage = () => {
 		setUserName("");
 		setPassword("");
 		setEmail("");
-		let token = localStorage.getItem("token");
-		if (data.token && data.token !== token) {
-			history.push("/login");
-		} else {
+		if (token) {
 			history.push("/profile");
 		}
 	};
+
+	useEffect(() => {
+		if (localStorage.getItem("token")) {
+			setToken(localStorage.getItem("token"));
+			history.push("/profile");
+		}
+	});
 	return (
 		<Container>
 			<Wrap>

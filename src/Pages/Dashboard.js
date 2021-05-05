@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getUserData } from "../features/userDataActions";
 const Dashboard = () => {
+	const dispatch = useDispatch();
+	const selector = useSelector((state) => state.userData.userData);
 	const parseJwt = (token) => {
 		try {
 			return JSON.parse(atob(token.split(".")[1]));
@@ -11,19 +14,23 @@ const Dashboard = () => {
 	};
 
 	useEffect(() => {
-		getUser();
-	}, []);
+		try {
+			getUser();
+		} catch (error) {
+			console.log(error);
+		}
+	}, [dispatch]);
 
 	const getUser = () => {
 		let userToken = localStorage.getItem("token");
 		const id = parseJwt(userToken).id;
-		
+		dispatch(getUserData(id));
 	};
 
 	return (
 		<Nav>
 			<Logo>TODO LIST</Logo>
-			<User>User</User>
+			{selector ? <User>{selector.name}</User> : ""}
 		</Nav>
 	);
 };

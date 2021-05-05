@@ -11,6 +11,7 @@ const LoginPage = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const { data } = useSelector((state) => state.loginData);
+	const [token, setToken] = useState("");
 	const getLoginMail = (e) => {
 		setEmail(e.target.value);
 	};
@@ -21,20 +22,18 @@ const LoginPage = () => {
 	const loginHandler = (e) => {
 		e.preventDefault();
 		dispatch(login(email, password));
-		let token = localStorage.getItem("token");
-		// if (data.token && data.token !== token) {
-		// 	history.push("/login");
-		// } else {
-		// 	history.push("/profile");
-		// }
-		console.log(data);
+		if (token) {
+			history.push("/profile");
+		}
+		console.log(token);
 	};
 
 	useEffect(() => {
 		if (localStorage.getItem("token")) {
+			setToken(localStorage.getItem("token"));
 			history.push("/profile");
 		}
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<Container>
